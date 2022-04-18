@@ -1,0 +1,16 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+   <soapenv:Header>
+      <p:header xsi:type="p:ServiceHeader_Type" xmlns:p="http://www.banquelaurentienne.ca/Common/" xmlns:ns0="http://www.banquelaurentienne.ca/Common/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         <languageCd>AN</languageCd>
+         <channelCd>BPM</channelCd>
+         <userName>jinggaz</userName>
+      </p:header>
+   </soapenv:Header>
+   <soapenv:Body>
+      <p:getClientSummary xmlns:p="http://ClientProfile.DataBloc/ClientProfile_DataBloc">
+         <out4:getClientSummaryRequest xmlns:xs4xs="http://www.w3.org/2001/XMLSchema" xmlns:io6="http://www.w3.org/2005/08/addressing" xmlns:io5="http://www.ibm.com/xmlns/prod/websphere/http/sca/6.1.0" xmlns:out="http://www.banquelaurentienne.ca/BLCDomainLibraryFSC/lib/comnlibv1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:io4="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:io3="http://www.ibm.com/xmlns/prod/websphere/mq/sca/6.0.0" xmlns:io2="http://www.ibm.com/websphere/sibx/smo/v6.0.1" xmlns:out7="wsdl.http://ClientProfile.DataBloc/ClientProfile_DataBloc" xmlns:out6="http://www.banquelaurentienne.ca/Common/" xmlns:out5="http://ClientProfile.DataBloc/ClientProfile_DataBloc" xmlns:out4="http://www.banquelaurentienne.ca/ClientProfile/getClientSummaryRequest" xmlns:io="http://www.w3.org/2003/05/soap-envelope" xmlns:out3="http://ClientProfile.DataBloc" xmlns:out2="http://www.banquelaurentienne.ca/ClientProfile/getClientSummaryResponse">
+            <out4:ClientID>812670526</out4:ClientID>
+         </out4:getClientSummaryRequest>
+      </p:getClientSummary>
+   </soapenv:Body>
+</soapenv:Envelope>
