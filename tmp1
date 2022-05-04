@@ -1,1 +1,18 @@
 https://www.ibm.com/support/pages/monitoring-ibm-business-process-manager-bpm-v8570-usage
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:com="http://www.banquelaurentienne.ca/Common/" xmlns:get="http://www.banquelaurentienne.ca/getAlert">
+   <soapenv:Header>
+      <com:header>
+         <languageCd>AN</languageCd>
+         <channelCd>BPM</channelCd>
+         <userName>jinggaz</userName>
+      </com:header>
+   </soapenv:Header>
+   <soapenv:Body>
+      <get:getAlert>
+         <getAlert_Req>
+            <ClientID>343752388</ClientID>
+         </getAlert_Req>
+      </get:getAlert>
+   </soapenv:Body>
+</soapenv:Envelope>
