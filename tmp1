@@ -1,92 +1,113 @@
-Join Zoom Meeting
-https://us06web.zoom.us/j/83716692339?pwd=Q3F1MjdCV1IxOWpwY1F5b2c1ZzhqQT09 
-
-Meeting ID: 837 1669 2339
-Passcode: 784116
-
-
-External Email: Use caution with links and attachments in this communication.
-Courriel externe : Faites preuve de prudence en ce qui a trait aux liens et aux pièces jointes dans cette communication.
-
-Hi Kevin,
-
-As per our meeting today, below the plan to implement IHS log rotation on DEV server.  Let you know when implemented.
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import com.ibm.websphere.sibx.smobo.*;
 
 
-Regards,
 
-Carlos Duarte Gonzalez
-WebSphere Support Team Lead
 
-Email: Carlos.Duarte.Gonzalez@Kyndryl.com
-Pager: 416-375-5370
+/**
+ * GENERATED COMMENT - DO NOT MODIFY
+ * Variables:  for output terminals - out (com.ibm.wsspi.sibx.mediation.OutputTerminal)
+ *             for user properties - <No user properties defined>
+ * Inputs:     inputTerminal (com.ibm.wsspi.sibx.mediation.InputTerminal), smo (com.ibm.websphere.sibx.smobo.ServiceMessageObject)
+ * Exceptions: com.ibm.wsspi.sibx.mediation.MediationConfigurationException, com.ibm.wsspi.sibx.mediation.MediationBusinessException
+ */
  
+System.out.println("set WS Addr (All-in-one)...");
 
+/*****************************************/
+/*	1) look up ESB Service URL by id	*/
+/*****************************************/
+System.out.println("1) look up ESB Service URL by id");
 
+DataSource dataSource = null;
+InitialContext context = null;
+Connection connection = null;
 
-From: Carlos Duarte Gonzalez 
-Sent: May 6, 2022 3:31 PM
-To: Gagan Bajaj <Gagan.Bajaj1@kyndryl.com>; RAJESH DAVULURI <Rajesh.Davuluri@kyndryl.com>
-Subject: Implement log rotation on DEV server ND3600WAS01
+ResultSet resultSet = null;
+PreparedStatement preparedStatement = null;
 
-Hi Gagan/Rajesh;
+// create SQL query to fetch particular record
+String sql = "SELECT service_id, service_url FROM dbo.CL88_ESB_SERVICE where service_id = ?";
+String service_id = "001_ESB_Alert";
+String service_url = null;
 
-As per our yesterday session, please find below the instructions to implement log rotation on BPM DEV server.  Please create a change for Tuesday if possible.
+try {
+	  	context = new InitialContext();
+	  	// Tomcat/Possibly others: java:comp/env/jdbc/myDatasourceJndiName
+	  	dataSource = (DataSource) context.lookup("jdbc/OCBS");
+	
+		// use the connection
+		connection = dataSource.getConnection();
+	 	 
+		// database query
+	  	preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setString(1, service_id);
+	   
+		resultSet = preparedStatement.executeQuery();
+		
+		System.out.println("==== show result ======");
+	
+		while( resultSet.next()) {
+	        
+	        System.out.println("service_id:" + resultSet.getString(1) + ", service_url:" + resultSet.getString(2));
+	        
+	        service_url = resultSet.getString(2);
+	    }
+} 
+catch (NamingException e) {
+    System.out.println("NamingException caught!!!");
+    e.printStackTrace();
+} 
+catch (SQLException e) {
+    System.out.println("SQLException caught!!!");
+    e.printStackTrace();
+} 
+finally
+{
+ 	try 
+ 	{
+ 		if (null != connection) {
+		// cleanup resources, once after processing
+		resultSet.close();
+		preparedStatement.close();
+	
+		// and then finally close connection
+		connection.close();
+		}
+ 	}
+ 	catch (SQLException sqlex) {
+		sqlex.printStackTrace();
+	}
+}  
 
-Implementation steps
+/****************************************/
+/*	2) set WS Addressing URL			*/
+/****************************************/
+SMOHeaderType smoHeaderType = smo.getHeaders().getSMOHeader();
 
-1. Login into server
-2. Navigate to E:\IBM\HTTPServer\conf
-3. Create a backup file of httpd.conf  (e.g httpd.conf.yyyy.mm.dd)
-4. Edit httpd.conf file and make the following update
+System.out.println("2) set WS Addressing URL");
 
-Before
-
-ErrorLog logs/error.log
-
-After
-
-#ErrorLog logs/error.log
-ErrorLog "|E:/IBM/HTTPServer/bin/rotatelogs.exe E:/IBM/HTTPServer/logs/error.log.%Y-%m-%d-%H_%M_%S 604800"
-
-Before
-
-CustomLog logs/access.log common
-
-After
-
-#CustomLog logs/access.log common
-CustomLog "|E:/IBM/HTTPServer/bin/rotatelogs.exe E:/IBM/HTTPServer/logs/access.log.%Y-%m-%d-%H_%M_%S 604800" common
-
-5. Save the changes to httpd.conf file
-
-6. Stop service "IBM HTTP Server V8.0 from Windows service screen
-
-7. Rename both access.log and error.log in E:\IBM\HTTPServer\logs to access.log.yyyy.mm.dd and error.log.yyyy.mm.dd.  We should start IBM HTTP server with new logs
-
-8. Start service "IBM HTTP Server V8.0 from Windows service screen
-
-Rollback steps 
-
-1. Stop  service "IBM HTTP Server V8.0 from Windows service screen
-
-2. Restore httpd.conf file on E:\IBM\HTTPServer\conf from backup done during implementation
-
-3. Start service "IBM HTTP Server V8.0 from Windows service screen
-
-
-Verification steps:
-
-1. Check IBM HTTP server is up and running on Task Manager
-2. Check that new access.log and error.log were created on startup on E:\IBM\HTTPServer\logs
-3. Open error.log and access.log and confirm that IHS is working fine.
-
-Regards,
-
-Carlos Duarte Gonzalez
-WebSphere Support Team Lead
-
-Email: Carlos.Duarte.Gonzalez@Kyndryl.com
-Pager: 416-375-5370
+if (smoHeaderType != null)
+{
+	TargetAddressType targetAddress = smoHeaderType.getTarget();
+	 
+	if (targetAddress != null)
+	{
+	   	System.out.println("before change, targetAddress.getAddress():" + targetAddress.getAddress());
+		
+		targetAddress.setAddress(service_url);
+	} 
+  
+	System.out.println("after change, targetAddress.getAddress():" + targetAddress.getAddress());
+	 
+}
  
+out.fire(smo); // propagate the service message object to the primitive that is wired to the 'out' terminal
+
 
