@@ -1,3 +1,19 @@
 https://wiki.pscs.co.uk/how_to:10053
 
 https://www.chilkatsoft.com/p/p_299.asp
+
+<soapenv:Header>
+      <com:header>
+         <languageCd>AN</languageCd>
+         <channelCd>BPM</channelCd>
+         <userName>jinggaz</userName>
+         <organization>?</organization>
+         <requestId>22</requestId>
+      </com:header>
+   </soapenv:Header>
+   <soapenv:Body>
+      <par:getPartyRequest>
+         <ClientID>156252543</ClientID>
+      </par:getPartyRequest>
+   </soapenv:Body>
+</soapenv:Envelope>"
